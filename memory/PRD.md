@@ -50,8 +50,16 @@ README, vercel.json, successful production build).
   gallery frames 086–107 with categories; counts updated to 107 everywhere.
 - 2026-10-03: GitHub/Vercel readiness: .gitignore (.env covered), backend
   .env.example, root vercel.json (Vite SPA build + rewrites), full README.
-- Verified: `yarn typecheck` clean, `yarn build` succeeds, /api curl OK,
-  desktop + mobile screenshots of all pages/flows.
+- 2026-10-03: Vercel/npm production readiness: generated frontend/package-lock.json
+  (npm), removed yarn.lock, added frontend/vercel.json SPA rewrite (works with
+  Vercel Root Directory = frontend), .gitignore covers .env.* with .env.example
+  exceptions, README documents exact Vercel settings (Root Directory frontend,
+  npm install, npm run build, dist). Verified with a CLEAN npm install &&
+  npm run build in an isolated copy → dist with all 107 frames; npm run build
+  also re-run in /app/frontend. Backend stays separate (not needed by the
+  static site).
+- Pending: live Google reviews/rating display — requires the owner's Google
+  Places API key (secret) before it can be wired; must not be faked.
 
 ## Backlog
 - P0: none

@@ -86,7 +86,10 @@ android-sdk/
 
 # Environment variables — never commit secrets
 .env
+.env.*
 **/.env
+**/.env.*
+!.env.example
 !**/.env.example
 
 # overlay black-box crash/user-report dumps — session data, never history

@@ -54,29 +54,31 @@ location section and full SEO meta.
 
 ## Getting Started (VS Code)
 
-Prerequisites: Node.js 20.19+ (or 22.12+) and Yarn 1.x (`npm install -g yarn`).
+Prerequisites: Node.js 20.19+ (or 22.12+) and npm.
 
 ```bash
 git clone <your-repo-url>
-cd <repo-folder>
+cd <repo-folder>/frontend
 
 # install dependencies
-yarn --cwd frontend install
+npm install
 
 # start the dev server  →  http://localhost:3000
-yarn --cwd frontend dev
+npm run dev
 ```
 
 ### Production build
 
 ```bash
-yarn --cwd frontend build      # outputs static site to frontend/dist
-yarn --cwd frontend preview    # serve the production build locally
+cd frontend
+npm run build      # outputs static site to frontend/dist
+npm run preview    # serve the production build locally
 ```
 
 ## Environment Variables
 
-The **frontend needs no environment variables** — it is a fully static site.
+The **frontend needs no environment variables** — it is a fully static site
+(no VITE_* variables are used anywhere in the source).
 
 The optional backend reads `backend/.env` (never commit it — it is git-ignored).
 Copy `backend/.env.example` and adjust:
@@ -91,14 +93,33 @@ Copy `backend/.env.example` and adjust:
 
 1. Push this repository to GitHub.
 2. In Vercel: **Add New → Project → Import** the repository.
-3. No settings needed — the included root `vercel.json` installs and builds
-   `frontend/` and publishes `frontend/dist`, with SPA rewrites so
-   `/gallery` and `/projects/<slug>` work on refresh.
-4. Deploy.
+3. In the project settings use exactly:
+
+   | Setting          | Value           |
+   | ---------------- | --------------- |
+   | Root Directory   | `frontend`      |
+   | Framework Preset | Vite            |
+   | Install Command  | `npm install`   |
+   | Build Command    | `npm run build` |
+   | Output Directory | `dist`          |
+
+4. Deploy. `frontend/vercel.json` adds the SPA rewrite, so refreshing
+   `/gallery` or `/projects/<slug>` never returns a 404.
+
+The site is fully static, so the FastAPI `backend/` is **not** required on
+Vercel. If you ever want the backend API online, deploy it separately
+(e.g. Render/Railway) — the website does not call it.
+
+(Alternative: if you import the repo without setting a Root Directory, the
+root-level `vercel.json` builds `frontend/` and publishes `frontend/dist`
+automatically — both paths produce the same site.)
 
 ## GitHub checklist (already handled)
 
-- `.gitignore` excludes `node_modules`, builds, logs and all `.env` files
+- `.gitignore` excludes `node_modules`, `dist`, builds, logs and all
+  `.env` / `.env.*` files (while keeping `.env.example`)
+- `frontend/package.json` + `frontend/package-lock.json` are committed and
+  verified with a clean `npm install && npm run build`
 - No API keys, secrets or credentials anywhere in the source
 - Contact data (phone / WhatsApp / socials) is public business information,
   centralised in `frontend/src/data/site.ts`
